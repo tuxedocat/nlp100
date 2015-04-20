@@ -15,15 +15,11 @@ import json
 import re
 
 filepath = "../dat/jawiki-country.json.gz"
-sec = re.compile(r"^=+.*=+$")
 
-
-def getsection(line):
-    m = sec.search(line)
-    if m:
-        return (m.string.replace("=",""), m.string.count("=")//2)
-    else:
-        pass
+def searchmedia(line):
+    """Extract media [[File:<filename>...]]"""
+    media = re.compile(r"(?<=\[\[File:).+?\.[A-Za-z]{3}")
+    return media.search(line)
 
 if __name__ == '__main__':
     """Read JSON file, and print the article about the UK"""
@@ -33,8 +29,7 @@ if __name__ == '__main__':
             _j = json.loads(line.decode("utf-8"))
             j[_j["title"]] = _j["text"]
     text = j["イギリス"]
-
-    sections = [getsection(l) for l in text.split("\n")]
-    for section in sections:
-        if section:
-            print("Name {}, Level {}".format(section[0], section[1]))
+    
+    for m in (searchmedia(line) for line in text.split("\n")):
+        if m:
+            print(m.group())
