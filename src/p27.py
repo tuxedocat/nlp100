@@ -28,8 +28,19 @@ def getpair(line):
     _m = pair.search(line)
     if _m:
         key = _m.group('key')
-        value = _m.group('value')
-        return (key, value)
+        _v = rm_emphasis(_m.group('value'))
+        _v = rm_internallink(_v)
+        return (key, _v)
+
+def rm_emphasis(string):
+    """remove wikimedia markup of emphasis"""
+    emp = re.compile(r"'{2,5}")
+    return emp.sub("", string)
+
+def rm_internallink(string):
+    """remove wikimedia markup of [[InternalLink|text]]"""
+    intl = re.compile(r"\[{2}|\]{2}")
+    return intl.sub("", string)
 
 if __name__ == '__main__':
     """Read JSON file, and extract Wikipedia's common metadata"""
