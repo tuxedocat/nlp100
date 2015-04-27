@@ -12,8 +12,8 @@ import MeCab
 import pickle
 
 if __name__ == '__main__':
-    with open('../dat/neko.txt.dic','rb') as f:
+    with open('../dat/neko.txt.dic', 'rb') as f:
         parsed = pickle.load(f)
 
     v_base = [[d.get("base") for d in s if s is not None and d['pos'] == "動詞"]
-                   for s in parsed]
+              for s in parsed]

@@ -11,6 +11,7 @@ import sys
 import MeCab
 import pickle
 
+
 def get_np(sentencelist: list) -> list:
     """Find pattern <noun> の_助詞_連体化 <noun>"""
     nplist = []
@@ -26,8 +27,8 @@ def get_np(sentencelist: list) -> list:
                 for i in noid:
                     try:
                         no = _l[i]
-                        _a = _l[i-1] if _l[i-1]["pos"] == "名詞" else None
-                        _b = _l[i+1] if _l[i+1]["pos"] == "名詞" else None
+                        _a = _l[i - 1] if _l[i - 1]["pos"] == "名詞" else None
+                        _b = _l[i + 1] if _l[i + 1]["pos"] == "名詞" else None
                     except IndexError:
                         _a, _b = None, None
                     if _a and _b:
@@ -38,7 +39,7 @@ def get_np(sentencelist: list) -> list:
 
 
 if __name__ == '__main__':
-    with open('../dat/neko.txt.dic','rb') as f:
+    with open('../dat/neko.txt.dic', 'rb') as f:
         parsed = pickle.load(f)
 
     nplist = get_np(parsed)

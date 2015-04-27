@@ -11,6 +11,7 @@ import sys
 import MeCab
 import pickle
 
+
 def morph2dict(line):
     """parse a line of mecab's output, and put them into a dict"""
     d = {}
@@ -30,6 +31,7 @@ if __name__ == '__main__':
     with open('../dat/neko.txt.mecab', 'r') as f:
         tagged = f.read().split("EOS")
 
-    packed = [[morph2dict(l) for l in s.split("\n") if morph2dict(l)] for s in tagged]
-    with open('../dat/neko.txt.dic','wb') as f:
+    packed = [
+        [morph2dict(l) for l in s.split("\n") if morph2dict(l)] for s in tagged]
+    with open('../dat/neko.txt.dic', 'wb') as f:
         pickle.dump(packed, f)
