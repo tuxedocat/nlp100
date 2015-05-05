@@ -45,7 +45,6 @@ class WordFreq:
         sns.set(style='dark', context='talk')
         y = [t[1] for t in self.counter.items()]
         plt.hist(y, bins=bins, log=True)
-        # plt.xticks(range(n), x)
         plt.show()
 
 if __name__ == '__main__':
