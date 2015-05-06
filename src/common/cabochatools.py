@@ -22,6 +22,12 @@ class PrinterMixin:
             src=self.srcs, dep2=self.dst))
 
 
+class ExtractMixin:
+
+    def chunktext(self, filter_p=None):
+        return "".join(filter(filter_p, [m.surface for m in self.morphs]))
+
+
 class Morph(PrinterMixin):
 
     def __init__(self, raw):
@@ -43,7 +49,7 @@ class Morph(PrinterMixin):
         self.pos1 = _m[1]
 
 
-class Chunk(PrinterMixin):
+class Chunk(PrinterMixin, ExtractMixin):
 
     def __init__(self, morphlist, meta):
         self.morphs = morphlist
