@@ -1,4 +1,7 @@
 dat/*
+out/*
 .DS_Store
 *.pyc
 *.gz
+*.png
+*.dot
