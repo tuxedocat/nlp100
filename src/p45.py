@@ -57,3 +57,9 @@ if __name__ == '__main__':
 
     for t in predcases:
         print("{v}\t{c}".format(v=t[0], c=" ".join(sorted(t[1]))))
+
+    print("# Additional commandline example (frequency of pred-particles patterns)")
+    print("# python p45.py | sort | uniq -c | sort -nr")
+
+    print("# Additional commandline example (する・見る・与える)")
+    print('# python p45.py | egrep "(する|見る|与える)" | sort | uniq -c | sort -nr')
