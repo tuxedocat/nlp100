@@ -34,6 +34,7 @@ if __name__ == '__main__':
         for srcc in sent:
             pred = get_leftmostverb(srcc.morphs)
             particles = []
+            words = []
             if pred:
                 predid = srcc.srcs[0] if srcc.srcs else -1
                 if predid >= 0:
@@ -42,16 +43,16 @@ if __name__ == '__main__':
                             _p = get_particle(c.morphs)
                             if _p:
                                 particles.append(_p)
+                                words.append(c.chunktext(filter_p=punct_p))
             if pred and particles:
-                predcases.append((pred, particles))
+                predcases.append((pred, zip(particles, words)))
             pred = ""
             particles = []
+            words = []
 
     for t in predcases:
-        print("{v}\t{c}".format(v=t[0], c=" ".join(sorted(t[1]))))
-
-    print("# Additional commandline example (frequency of pred-particles patterns)")
-    print("# python p45.py | sort | uniq -c | sort -nr")
-
-    print("# Additional commandline example (する・見る・与える)")
-    print('# python p45.py | egrep "(する|見る|与える)" | sort | uniq -c | sort -nr')
+        verb = t[0]
+        case = sorted(t[1], key=lambda x:x[0])
+        particles = [p[0] for p in case]
+        words = [p[1] for p in case]
+        print("{v}\t{c}\t{w}".format(v=verb, c=" ".join(particles), w=" ".join(words)))
