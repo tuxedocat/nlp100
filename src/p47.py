@@ -15,7 +15,7 @@ def get_leftmostxx_func(pos):
         for morph in morphs:
             if morph.pos == pos:
                 return morph.base
-        return None
+        return ""
 
     return get_xx
 
@@ -43,29 +43,22 @@ if __name__ == '__main__':
     predcases = []
     for sent in parsed:
         for srcc in sent:
-            pred = get_leftmostverb(srcc.morphs)
             particles = []
             words = []
-            if pred:
-                predid = srcc.srcs[0] if srcc.srcs else -1
-                if predid >= 0:
-                    for c in sent:
-                        if is_sahen_vp(c.morphs):
-                            if c.dst == predid:
-                                _p = get_particle(c.morphs)
-                                if _p:
-                                    particles.append(_p)
-                                    words.append(c.chunktext(filter_p=punct_p))
-            if pred and particles:
-                predcases.append((pred, zip(particles, words)))
-            pred = ""
-            particles = []
-            words = []
+            if is_sahen_vp(srcc.morphs):
+                npid = srcc.srcs[0]
+                npdepto = srcc.dst
+                vp = sent[npdepto]
+                if vp:
+                    particles = [get_particle(ph.morphs) for i, ph in enumerate(sent) if ph.dst == vp.srcs[0]]
+                    words = [ph.chunktext(filter_p=punct_p) for i, ph in enumerate(sent) if ph.dst == vp.srcs[0]]
+                    if particles and words:
+                        predcases.append((srcc.chunktext_vbase(filter_p=punct_p)+get_leftmostverb(vp.morphs),                         zip(particles, words)))
 
     for t in predcases:
-        verb = t[0]
-        case = sorted(t[1], key=lambda x: x[0])
-        particles = [p[0] for p in case]
-        words = [p[1] for p in case]
+        vp = t[0]
+        _p = list(t[1])
+        parts = [p[0] for p in _p]
+        np = [p[1] for p in _p]
         print("{v}\t{c}\t{w}".format(
-            v=" ".join(words) + verb, c=" ".join(particles), w=" ".join(words)))
+            v=vp, c=" ".join(parts), w=" ".join(np)))
