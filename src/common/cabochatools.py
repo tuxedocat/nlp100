@@ -5,6 +5,7 @@ __copyright__ = "Copyright 2015, tuxedocat"
 __license__ = "MIT"
 from itertools import takewhile
 
+
 class PrinterMixin:
 
     def __init__(self):
@@ -27,10 +28,11 @@ class ExtractMixin:
         return "".join(filter(filter_p, [m.surface for m in self.morphs]))
 
     def chunktext_vbase(self, filter_p=None):
-        return "".join(filter(filter_p, [self._vbase(m) for m in self.morphs]))
+        return "".join(filter(filter_p, [m.base for m in self.morphs]))
 
     def _vbase(self, m=None):
         return m.base if m.pos == "動詞" else m.surface
+
 
 class Morph(PrinterMixin):
 
@@ -63,7 +65,7 @@ class Chunk(PrinterMixin, ExtractMixin):
     def _setdeps(self):
         _ = self.meta.strip().split()
         self.srcs = [int(_[1])]
-        self.dst = int("".join([c for c in _[2] if c.isdigit()]))
+        self.dst = int("".join([c for c in _[2] if c.isdigit() or c == "-"]))
 
 
 def read_cabocha(file):
