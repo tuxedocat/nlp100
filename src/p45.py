@@ -7,23 +7,12 @@ __copyright__ = "Copyright 2015, tuxedocat"
 __credits__ = ["Naoaki Okazaki", "Inui-Okazaki Lab. at Tohoku University"]
 __license__ = "MIT"
 
-from common.cabochatools import read_cabocha, add_chunks
-
-
-def get_leftmostxx_func(pos):
-    def get_xx(morphs):
-        for morph in morphs:
-            if morph.pos == pos:
-                return morph.base
-        return None
-
-    return get_xx
+from common.cabochatools import read_cabocha, add_chunks, get_leftmostxx_func
 
 
 if __name__ == '__main__':
     get_leftmostverb = get_leftmostxx_func("動詞")
     get_particle = get_leftmostxx_func("助詞")
-    punct_p = lambda x: False if x in ["、", "。", "。。"] else True
 
     with open('../dat/neko.txt.cabocha', encoding='utf-8') as f:
         morphs, _ = read_cabocha(f)
@@ -50,7 +39,8 @@ if __name__ == '__main__':
     for t in predcases:
         print("{v}\t{c}".format(v=t[0], c=" ".join(sorted(t[1]))))
 
-    print("# Additional commandline example (frequency of pred-particles patterns)")
+    print(
+        "# Additional commandline example (frequency of pred-particles patterns)")
     print("# python p45.py | sort | uniq -c | sort -nr")
 
     print("# Additional commandline example (する・見る・与える)")

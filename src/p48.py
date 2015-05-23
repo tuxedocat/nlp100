@@ -7,21 +7,14 @@ __copyright__ = "Copyright 2015, tuxedocat"
 __credits__ = ["Naoaki Okazaki", "Inui-Okazaki Lab. at Tohoku University"]
 __license__ = "MIT"
 
-from common.cabochatools import read_cabocha, add_chunks
+from common.cabochatools import read_cabocha, add_chunks, get_is_xx_in_chunk_func, punct_p
 
 
-def is_noun_in_chunk(morphs):
-    return any([m.pos == "名詞" for m in morphs])
-
-
-def is_verb_in_chunk(morphs):
-    return any([m.pos == "動詞" for m in morphs])
-
-
-def get_dependency(chunklist):
+def get_chain(chunklist):
+    is_noun_in_chunk = get_is_xx_in_chunk_func(pos="名詞")
     chains = []
     for i, chunk in enumerate(chunklist):
-        if is_noun_in_chunk(chunk.morphs):
+        if is_noun_in_chunk(chunk):
             nxt = chunk.dst
             chain = [chunk.chunktext(punct_p)]
             while nxt > 0:
@@ -41,10 +34,9 @@ if __name__ == '__main__':
     with open('../dat/neko.txt.cabocha', encoding='utf-8') as f:
         morphs, _ = read_cabocha(f)
 
-    punct_p = lambda x: False if x in ["、", "。", "。。"] else True
     parsed = add_chunks(morphs)
     for i, sent in enumerate(parsed):
-        chains = get_dependency(sent)
+        chains = get_chain(sent)
         if chains:
             for c in chains:
                 print(c)

@@ -7,33 +7,8 @@ __copyright__ = "Copyright 2015, tuxedocat"
 __credits__ = ["Naoaki Okazaki", "Inui-Okazaki Lab. at Tohoku University"]
 __license__ = "MIT"
 
-from common.cabochatools import read_cabocha, add_chunks
+from common.cabochatools import read_cabocha, add_chunks, visualize_dependency
 import pydot
-
-
-def is_noun_in_chunk(morphs):
-    return any([m.pos == "名詞" for m in morphs])
-
-
-def is_verb_in_chunk(morphs):
-    return any([m.pos == "動詞" for m in morphs])
-
-
-def visualize_dependency(chunklist, path):
-    g = pydot.Dot(graph_type='digraph')
-    for i, chunk in enumerate(chunklist):
-        name = chunk.chunktext(punct_p)
-        try:
-            dstchunk = chunklist[chunk.dst]
-            dstname = dstchunk.chunktext(punct_p)
-            edge = pydot.Edge(src=name, dst=dstname)
-            g.add_edge(edge)
-        except:
-            pass
-    if path.endswith(".png"):
-        g.write_png(path)
-    else:
-        g.write_dot(path)
 
 
 if __name__ == '__main__':
